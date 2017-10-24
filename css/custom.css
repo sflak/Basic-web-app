@@ -1,0 +1,15 @@
+img{
+	width: 40%;
+
+}
+
+#map {
+
+	height: 350px;
+	width: 500px;
+}
+
+@media screen and (max-width: 480px){
+	img{width: 50%;}
+	map{width: 100%}
+}

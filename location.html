@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <link rel="stylesheet" href="css/custom.css"/>
+ 
+
+
+  <title>ABC Toys</title>
+
+  <script>
+  window.onload = getLocation;
+
+var directionsService = null;
+var directionsDisplay = null;
+var map = null;
+
+function initialize() {
+  console.log("hello");
+	directionsService = new google.maps.DirectionsService();
+  directionsDisplay = new google.maps.DirectionsRenderer();
+        
+  var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+  var mapOptions = {
+  	zoom:7,
+  	center: chicago
+  }
+  map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  directionsDisplay.setMap(map);
+}
+  
+function handleGeoError(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+};
+
+var geo = null;
+function getLocation() {
+
+  geo = navigator.geolocation;
+  console.log(geo);
+	if( geo ) {
+    console.log("yes");
+  	geo.getCurrentPosition( calcRoute, handleGeoError);
+
+	} else {
+  	alert( "Oops, Geolocation API is not supported" );
+	}	
+}
+
+function calcRoute( position ) {
+  console.log("Calculating route");
+	var latitude = position.coords.latitude;
+	var longitude = position.coords.longitude;
+
+	var start = new google.maps.LatLng(latitude, longitude);
+	var end = 'belmont, ca';
+
+	var request = {
+		origin:start,
+		destination:end,
+		travelMode: google.maps.TravelMode.DRIVING
+	};
+
+	directionsService.route(request, function(result, status) {
+		if (status == google.maps.DirectionsStatus.OK) {
+			directionsDisplay.setDirections(result);
+		}
+	});
+}
+  </script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJAcxuEg3vezsUKlXz5Zab46LzJFJhnWk	
+	&callback=initialize">
+  </script>
+
+</head>
+
+<body>
+  
+<div data-role="page">
+	<div data-role="header">
+		<h1>ABC Toys</h1>
+		<h3>Location</h3>
+	</div>
+	<div data-role="navbar" data-grid="c">
+		<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="products.html">Products</a></li>
+			<li><a href="contact.html">Contact Us</a></li>
+			<li><a href="location.html" class="ui-btn-active">Location</a></li>
+			
+		</ul>
+	</div>
+	<div role="main" class="ui-content">
+		
+    <h1>Our Location</h1>
+    <p>Here's a map from where you are, to us!</p>
+		<div id="map"> </div>
+	</div>
+</div>
+</body>
+
+</html>
